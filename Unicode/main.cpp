@@ -4,24 +4,60 @@
 #include <tchar.h>
 using namespace std;
 
-void Task1()
+void Task1(_TCHAR* text)
 {
-	_TCHAR buf[15] = _TEXT("abcba");
-	_TCHAR bufcopy[15];
+	_TCHAR textcopy[15];
 
-	_tcscpy_s(bufcopy, buf);
-	_tcsrev(bufcopy);
+	_tcscpy_s(textcopy, text);
+	_tcsrev(textcopy);
 
-	bool pal = _tcscmp(buf, bufcopy) == 0;
-	string output = pal ? " is a palindrome" : " is not a palindrome";
+	bool pal = _tcscmp(text, textcopy) == 0;
 
-	wcout << buf;
-	cout << output << endl;
+	wcout << text << (pal ? " is a palindrome" : " is not a palindrome") << endl << endl;
 
+}
+
+void Task2(_TCHAR* text)
+{
+	int words = 0;
+	for (int i = 0; i < _tcslen(text); i++)
+	{
+		if ((text[i] != ' ' && text[i + 1] == ' ') || (i == _tcslen(text) - 1 && text[i] != ' ')) words++;
+	}
+	wcout << text << endl << "Words: " << words << endl << endl;
+}
+
+void Task3(_TCHAR* text, _TCHAR* find, _TCHAR* replace)
+{
+	_TCHAR* ind = _tcsstr(text, find);
+	if (ind == nullptr) return;
+
+	int position = ind - text;
+	ind += _tcslen(find); //text after substring
+
+	_TCHAR newText[50] = _TEXT("");
+
+	for (int i = 0; i < position; i++) 
+	{
+		newText[i] = text[i];
+	}
+	_tcscat(newText, replace);
+	_tcscat(newText, ind);
+	
+	_tcscpy(text, newText);
+
+	wcout << text << endl;
 }
 
 void main()
 {
+	_TCHAR pal[15] = _TEXT("abCba");
+	Task1(pal);
 
-	Task1();
+	_TCHAR str[50] = _TEXT("The quick brown fox jumps over a lazy dog");
+	Task2(str);
+
+	_TCHAR find[10] = _TEXT("brown");
+	_TCHAR replace[10] = _TEXT("red");
+	Task3(str, find, replace);
 }
